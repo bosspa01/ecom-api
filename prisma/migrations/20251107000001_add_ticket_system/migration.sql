@@ -1,0 +1,29 @@
+-- CreateEnum
+-- Create tables for Ticket and Message (MySQL-compatible)
+
+-- Create Ticket table
+CREATE TABLE `Ticket` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `title` TEXT NOT NULL,
+    `status` ENUM('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN',
+    `userId` INT NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- Create Message table
+CREATE TABLE `Message` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `content` TEXT NOT NULL,
+    `ticketId` INT NOT NULL,
+    `userId` INT NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- Add foreign keys
+ALTER TABLE `Ticket` ADD CONSTRAINT `Ticket_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Message` ADD CONSTRAINT `Message_ticketId_fkey` FOREIGN KEY (`ticketId`) REFERENCES `Ticket`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Message` ADD CONSTRAINT `Message_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
